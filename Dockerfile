@@ -111,7 +111,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     crackmapexec \
     nbtscan \
     onesixtyone \
-    snmpwalk \
+    snmp \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
