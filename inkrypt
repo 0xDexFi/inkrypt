@@ -148,23 +148,23 @@ parse_args() {
 
     for arg in "$@"; do
         case "$arg" in
-            TARGET=*)   export INKRYPT_TARGET="${arg#TARGET=}" ;;
-            SSH_USER=*) export INKRYPT_SSH_USER="${arg#SSH_USER=}" ;;
-            SSH_KEY=*)  export INKRYPT_SSH_KEY="${arg#SSH_KEY=}" ;;
-            SSH_PASS=*) export INKRYPT_SSH_PASS="${arg#SSH_PASS=}" ;;
-            SSH_PORT=*) export INKRYPT_SSH_PORT="${arg#SSH_PORT=}" ;;
-            CONFIG=*)   export INKRYPT_CONFIG="${arg#CONFIG=}" ;;
-            OUTPUT=*)   export INKRYPT_OUTPUT="${arg#OUTPUT=}" ;;
-            SCOPE=*)    export INKRYPT_SCOPE="${arg#SCOPE=}" ;;
-            ID=*)       export INKRYPT_WORKFLOW_ID="${arg#ID=}" ;;
-            PIPELINE_TESTING=*) export INKRYPT_PIPELINE_TESTING="${arg#PIPELINE_TESTING=}" ;;
-            REBUILD=*)  export INKRYPT_REBUILD="${arg#REBUILD=}" ;;
-            CLEAN=*)    export INKRYPT_CLEAN="${arg#CLEAN=}" ;;
+            TARGET=*)   INKRYPT_TARGET="${arg#TARGET=}" ;;
+            SSH_USER=*) INKRYPT_SSH_USER="${arg#SSH_USER=}" ;;
+            SSH_KEY=*)  INKRYPT_SSH_KEY="${arg#SSH_KEY=}" ;;
+            SSH_PASS=*) INKRYPT_SSH_PASS="${arg#SSH_PASS=}" ;;
+            SSH_PORT=*) INKRYPT_SSH_PORT="${arg#SSH_PORT=}" ;;
+            CONFIG=*)   INKRYPT_CONFIG="${arg#CONFIG=}" ;;
+            OUTPUT=*)   INKRYPT_OUTPUT="${arg#OUTPUT=}" ;;
+            SCOPE=*)    INKRYPT_SCOPE="${arg#SCOPE=}" ;;
+            ID=*)       INKRYPT_WORKFLOW_ID="${arg#ID=}" ;;
+            PIPELINE_TESTING=*) INKRYPT_PIPELINE_TESTING="${arg#PIPELINE_TESTING=}" ;;
+            REBUILD=*)  INKRYPT_REBUILD="${arg#REBUILD=}" ;;
+            CLEAN=*)    INKRYPT_CLEAN="${arg#CLEAN=}" ;;
             *)          echo -e "${RED}Unknown argument: $arg${NC}"; exit 1 ;;
         esac
     done
 
-    echo "$command"
+    COMMAND="$command"
 }
 
 ensure_containers() {
@@ -261,7 +261,21 @@ cmd_stop() {
 # Main
 # =============================================================================
 
-COMMAND=$(parse_args "$@")
+COMMAND=""
+INKRYPT_TARGET=""
+INKRYPT_SSH_USER=""
+INKRYPT_SSH_KEY=""
+INKRYPT_SSH_PASS=""
+INKRYPT_SSH_PORT=""
+INKRYPT_CONFIG=""
+INKRYPT_OUTPUT=""
+INKRYPT_SCOPE=""
+INKRYPT_WORKFLOW_ID=""
+INKRYPT_PIPELINE_TESTING=""
+INKRYPT_REBUILD=""
+INKRYPT_CLEAN=""
+
+parse_args "$@"
 
 case "$COMMAND" in
     start) cmd_start ;;
