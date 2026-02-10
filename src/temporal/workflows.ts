@@ -11,7 +11,7 @@ import {
   ApplicationFailure,
 } from '@temporalio/workflow';
 
-import type { PipelineInput, PipelineState, PipelineProgress, AgentActivityInput, AgentActivityResult, AgentMetrics } from './shared.js';
+import type { PipelineInput, PipelineState, PipelineProgress, AgentActivityInput, AgentActivityResult, AgentMetrics, AgentEvent } from './shared.js';
 import type { AgentName } from '../types/agents.js';
 
 // Proxy activities with appropriate timeouts
@@ -55,9 +55,11 @@ export async function pentestPipelineWorkflow(input: PipelineInput): Promise<Pip
     target: input.target,
     currentPhase: 'Initializing',
     currentAgent: null,
+    activeAgents: [],
     completedAgents: [],
     failedAgents: [],
     skippedAgents: [],
+    agentEvents: [],
     metrics: [],
     startTime: Date.now(),
     totalCost: 0,
@@ -72,8 +74,11 @@ export async function pentestPipelineWorkflow(input: PipelineInput): Promise<Pip
     status: state.status,
     currentPhase: state.currentPhase,
     currentAgent: state.currentAgent,
+    activeAgents: [...state.activeAgents],
     completedAgents: [...state.completedAgents],
     failedAgents: [...state.failedAgents],
+    skippedAgents: [...state.skippedAgents],
+    agentEvents: [...state.agentEvents],
     elapsedMs: Date.now() - state.startTime,
     totalCost: state.totalCost,
     agentMetrics: [...state.metrics],
@@ -101,6 +106,7 @@ export async function pentestPipelineWorkflow(input: PipelineInput): Promise<Pip
     // =========================================================================
     state.currentPhase = 'Pre-Reconnaissance';
     state.currentAgent = 'pre-recon';
+    pushEvent(state, 'pre-recon', 'started');
 
     // Run external tool scans first
     const toolResults = await activities.preReconToolScanActivity({
@@ -116,18 +122,21 @@ export async function pentestPipelineWorkflow(input: PipelineInput): Promise<Pip
       agent: 'pre-recon',
     });
     recordResult(state, preReconResult);
+    pushCompletionEvent(state, preReconResult);
 
     // =========================================================================
     // Phase 2: Reconnaissance
     // =========================================================================
     state.currentPhase = 'Reconnaissance';
     state.currentAgent = 'recon';
+    pushEvent(state, 'recon', 'started');
 
     const reconResult = await activities.reconActivity({
       ...baseInput,
       agent: 'recon',
     });
     recordResult(state, reconResult);
+    pushCompletionEvent(state, reconResult);
 
     // =========================================================================
     // Phase 3 & 4: Vulnerability Analysis + Exploitation (Pipelined)
@@ -157,12 +166,14 @@ export async function pentestPipelineWorkflow(input: PipelineInput): Promise<Pip
     // =========================================================================
     state.currentPhase = 'Reporting';
     state.currentAgent = 'report';
+    pushEvent(state, 'report', 'started');
 
     const reportResult = await activities.reportActivity({
       ...baseInput,
       agent: 'report',
     });
     recordResult(state, reportResult);
+    pushCompletionEvent(state, reportResult);
 
     // Assemble final report
     await activities.assembleReportActivity({
@@ -205,27 +216,32 @@ async function runVulnExploitPipeline(
 
   // Run vulnerability analysis
   state.currentAgent = vulnAgent;
+  pushEvent(state, vulnAgent, 'started');
   const vulnActivityFn = getActivityFunction(vulnAgent);
   const vulnResult = await vulnActivityFn({
     ...baseInput,
     agent: vulnAgent,
   });
   recordResult(state, vulnResult);
+  pushCompletionEvent(state, vulnResult);
 
   // Skip exploitation if vuln analysis failed or found nothing
   if (!vulnResult.success || vulnResult.deliverables.length === 0) {
     state.skippedAgents.push(exploitAgent);
+    pushEvent(state, exploitAgent, 'skipped');
     return;
   }
 
   // Run exploitation
   state.currentAgent = exploitAgent;
+  pushEvent(state, exploitAgent, 'started');
   const exploitActivityFn = getActivityFunction(exploitAgent);
   const exploitResult = await exploitActivityFn({
     ...baseInput,
     agent: exploitAgent,
   });
   recordResult(state, exploitResult);
+  pushCompletionEvent(state, exploitResult);
 }
 
 /**
@@ -265,4 +281,34 @@ function recordResult(state: PipelineState, result: AgentActivityResult): void {
       state.errors.push(`[${result.agent}] ${result.error}`);
     }
   }
+}
+
+/**
+ * Push an agent lifecycle event and update activeAgents tracking.
+ */
+function pushEvent(state: PipelineState, agent: AgentName, event: AgentEvent['event']): void {
+  const agentEvent: AgentEvent = { agent, event, timestamp: Date.now() };
+  state.agentEvents.push(agentEvent);
+
+  if (event === 'started') {
+    state.activeAgents.push(agent);
+  } else {
+    state.activeAgents = state.activeAgents.filter((a) => a !== agent);
+  }
+}
+
+/**
+ * Push a completed or failed event based on an activity result.
+ */
+function pushCompletionEvent(state: PipelineState, result: AgentActivityResult): void {
+  const event: AgentEvent['event'] = result.success ? 'completed' : 'failed';
+  const agentEvent: AgentEvent = {
+    agent: result.agent,
+    event,
+    timestamp: Date.now(),
+    duration: result.metrics.duration,
+    cost: result.metrics.cost,
+  };
+  state.agentEvents.push(agentEvent);
+  state.activeAgents = state.activeAgents.filter((a) => a !== result.agent);
 }

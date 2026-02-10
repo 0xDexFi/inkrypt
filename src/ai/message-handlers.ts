@@ -10,7 +10,7 @@ import type { AgentMessage } from './types.js';
 /**
  * Agent color mapping for terminal output.
  */
-const AGENT_COLORS: Record<string, (text: string) => string> = {
+export const AGENT_COLORS: Record<string, (text: string) => string> = {
   'pre-recon': chalk.blue,
   'recon': chalk.cyan,
   'ssh': chalk.red,
@@ -24,7 +24,7 @@ const AGENT_COLORS: Record<string, (text: string) => string> = {
 /**
  * Get the color function for an agent.
  */
-function getAgentColor(agent: AgentName): (text: string) => string {
+export function getAgentColor(agent: AgentName): (text: string) => string {
   for (const [key, color] of Object.entries(AGENT_COLORS)) {
     if (agent.includes(key)) return color;
   }

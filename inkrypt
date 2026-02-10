@@ -219,8 +219,8 @@ cmd_start() {
     [[ -n "${INKRYPT_SCOPE:-}" ]]     && client_args+=("--scope" "${INKRYPT_SCOPE}")
     [[ "${INKRYPT_PIPELINE_TESTING:-false}" == "true" ]] && client_args+=("--pipeline-testing")
 
-    echo -e "${BLUE}[*] Submitting pentest workflow...${NC}"
-    docker compose exec -T \
+    echo -e "${BLUE}[*] Launching pentest pipeline...${NC}"
+    docker compose exec \
         -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}" \
         -e CLAUDE_CODE_OAUTH_TOKEN="${CLAUDE_CODE_OAUTH_TOKEN:-}" \
         worker node dist/temporal/client.js "${client_args[@]}"

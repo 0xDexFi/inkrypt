@@ -47,6 +47,17 @@ export interface AgentMetrics {
 }
 
 /**
+ * Event emitted during agent lifecycle transitions.
+ */
+export interface AgentEvent {
+  agent: AgentName;
+  event: 'started' | 'completed' | 'failed' | 'skipped';
+  timestamp: number;
+  duration?: number;
+  cost?: number;
+}
+
+/**
  * Overall pipeline state maintained by the workflow.
  */
 export interface PipelineState {
@@ -54,9 +65,11 @@ export interface PipelineState {
   target: string;
   currentPhase: string;
   currentAgent: AgentName | null;
+  activeAgents: AgentName[];
   completedAgents: AgentName[];
   failedAgents: AgentName[];
   skippedAgents: AgentName[];
+  agentEvents: AgentEvent[];
   metrics: AgentMetrics[];
   startTime: number;
   endTime?: number;
@@ -74,8 +87,11 @@ export interface PipelineProgress {
   status: PipelineState['status'];
   currentPhase: string;
   currentAgent: AgentName | null;
+  activeAgents: AgentName[];
   completedAgents: AgentName[];
   failedAgents: AgentName[];
+  skippedAgents: AgentName[];
+  agentEvents: AgentEvent[];
   elapsedMs: number;
   totalCost: number;
   agentMetrics: AgentMetrics[];
