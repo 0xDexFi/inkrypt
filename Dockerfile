@@ -118,9 +118,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RDP & VNC Testing Tools
 # =============================================================================
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    freerdp2-x11 \
+    freerdp3-x11 \
     rdesktop \
-    tigervnc-viewer \
+    tigervnc-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
