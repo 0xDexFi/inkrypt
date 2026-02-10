@@ -42,12 +42,12 @@ export const AGENT_ORDER: { phase: string; agents: AgentName[]; parallel: boolea
   },
   {
     phase: 'Vulnerability Analysis',
-    agents: ['ssh-vuln', 'privesc-vuln', 'network-vuln', 'misconfig-vuln', 'credential-vuln'],
+    agents: ['ssh-vuln', 'privesc-vuln', 'network-vuln', 'misconfig-vuln', 'credential-vuln', 'rdp-vuln', 'vnc-vuln'],
     parallel: true,
   },
   {
     phase: 'Exploitation',
-    agents: ['ssh-exploit', 'privesc-exploit', 'network-exploit', 'misconfig-exploit', 'credential-exploit'],
+    agents: ['ssh-exploit', 'privesc-exploit', 'network-exploit', 'misconfig-exploit', 'credential-exploit', 'rdp-exploit', 'vnc-exploit'],
     parallel: true,
   },
   {
@@ -68,6 +68,8 @@ export function getParallelGroups(): { vuln: AgentName; exploit: AgentName }[] {
     { vuln: 'network-vuln', exploit: 'network-exploit' },
     { vuln: 'misconfig-vuln', exploit: 'misconfig-exploit' },
     { vuln: 'credential-vuln', exploit: 'credential-exploit' },
+    { vuln: 'rdp-vuln', exploit: 'rdp-exploit' },
+    { vuln: 'vnc-vuln', exploit: 'vnc-exploit' },
   ];
 }
 
@@ -83,11 +85,15 @@ export function getAgentDisplayName(agent: AgentName): string {
     'network-vuln': 'Network Service Analysis',
     'misconfig-vuln': 'System Misconfiguration Analysis',
     'credential-vuln': 'Credential Security Analysis',
+    'rdp-vuln': 'RDP Vulnerability Analysis',
+    'vnc-vuln': 'VNC Vulnerability Analysis',
     'ssh-exploit': 'SSH Exploitation',
     'privesc-exploit': 'Privilege Escalation Exploitation',
     'network-exploit': 'Network Service Exploitation',
     'misconfig-exploit': 'System Misconfiguration Exploitation',
     'credential-exploit': 'Credential Exploitation',
+    'rdp-exploit': 'RDP Exploitation',
+    'vnc-exploit': 'VNC Exploitation',
     'report': 'Report Generation',
   };
   return names[agent];

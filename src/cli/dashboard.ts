@@ -16,7 +16,7 @@ import { AGENT_COLORS } from '../ai/message-handlers.js';
  */
 export interface DashboardHandle {
   workflowId: string;
-  query<T>(queryDef: { queryType: string }): Promise<T>;
+  query<T>(queryDef: unknown): Promise<T>;
   result(): Promise<PipelineState>;
 }
 
@@ -28,8 +28,8 @@ const POLL_INTERVAL_MS = 2000;
 
 const ALL_AGENTS: AgentName[] = [
   'pre-recon', 'recon',
-  'ssh-vuln', 'privesc-vuln', 'network-vuln', 'misconfig-vuln', 'credential-vuln',
-  'ssh-exploit', 'privesc-exploit', 'network-exploit', 'misconfig-exploit', 'credential-exploit',
+  'ssh-vuln', 'privesc-vuln', 'network-vuln', 'misconfig-vuln', 'credential-vuln', 'rdp-vuln', 'vnc-vuln',
+  'ssh-exploit', 'privesc-exploit', 'network-exploit', 'misconfig-exploit', 'credential-exploit', 'rdp-exploit', 'vnc-exploit',
   'report',
 ];
 
@@ -39,6 +39,8 @@ const VULN_EXPLOIT_PAIRS: [AgentName, AgentName][] = [
   ['network-vuln', 'network-exploit'],
   ['misconfig-vuln', 'misconfig-exploit'],
   ['credential-vuln', 'credential-exploit'],
+  ['rdp-vuln', 'rdp-exploit'],
+  ['vnc-vuln', 'vnc-exploit'],
 ];
 
 const MAX_EVENT_LOG_LINES = 8;
@@ -184,9 +186,9 @@ function renderFrame(progress: PipelineProgress, input: PipelineInput): string {
   // Footer
   const completedCount = progress.completedAgents.length;
   const errorCount = progress.errors.length;
-  const footerStr = `Agents: ${completedCount}/13 complete  │  Errors: ${errorCount}  │  Ctrl+C to detach`;
+  const footerStr = `Agents: ${completedCount}/17 complete  │  Errors: ${errorCount}  │  Ctrl+C to detach`;
   lines.push(chalk.cyan(padLine(
-    `Agents: ${chalk.bold(completedCount.toString())}/13 complete  │  Errors: ${chalk.bold(errorCount.toString())}  │  ${chalk.dim('Ctrl+C to detach')}`,
+    `Agents: ${chalk.bold(completedCount.toString())}/17 complete  │  Errors: ${chalk.bold(errorCount.toString())}  │  ${chalk.dim('Ctrl+C to detach')}`,
     footerStr.length,
   )));
 

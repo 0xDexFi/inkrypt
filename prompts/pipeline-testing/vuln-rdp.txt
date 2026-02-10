@@ -1,0 +1,20 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+SCOPE: {{SCOPE}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+Quickly analyze RDP vulnerabilities on {{TARGET}} using recon data in {{OUTPUT_DIR}}/. Check for BlueKeep, NLA requirements, encryption levels, CredSSP issues, certificate weaknesses, and session hijacking potential. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write to {{OUTPUT_DIR}}/vuln-queues/:
+
+**vuln-queue-rdp.md** - Each finding with: Severity, Category, Description, Evidence, Impact, and Recommended Fix.
+
+## Safety Rules
+
+- No brute force, no exploitation, no config modification
+- Stay within scope: {{SCOPE}}

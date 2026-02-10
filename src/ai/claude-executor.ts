@@ -53,51 +53,52 @@ export async function executeAgent(input: AgentExecutionInput): Promise<AgentExe
     const mcpServers = buildMCPServers(input);
 
     // Execute via Claude Agent SDK
-    // Using dynamic import to support different SDK configurations
-    const { Claude } = await import('@anthropic-ai/claude-agent-sdk');
+    const { query } = await import('@anthropic-ai/claude-agent-sdk');
 
-    const client = new Claude({
-      apiKey: process.env['ANTHROPIC_API_KEY'],
-      maxOutputTokens: parseInt(process.env['CLAUDE_CODE_MAX_OUTPUT_TOKENS'] ?? '64000', 10),
-    });
-
-    const result = await client.run({
+    const stream = query({
       prompt,
-      mcpServers,
-      tools: getSystemTools(),
-      maxTurns: 100,
-      onMessage: async (message: any) => {
-        turns++;
-
-        if (message.type === 'tool_use') {
-          const callTimer = new Timer();
-          const record: ToolCallRecord = {
-            tool: message.tool,
-            input: message.input,
-            timestamp: new Date().toISOString(),
-            duration: 0,
-          };
-
-          await logger.logToolCall(message.tool, message.input);
-          record.duration = callTimer.elapsed();
-          toolCalls.push(record);
-        }
-
-        if (message.type === 'text') {
-          await logger.logResponse(message.content);
-        }
-
-        // Track usage
-        if (message.usage) {
-          totalInputTokens += message.usage.input_tokens ?? 0;
-          totalOutputTokens += message.usage.output_tokens ?? 0;
-          totalCost += calculateCost(
-            message.usage.input_tokens ?? 0,
-            message.usage.output_tokens ?? 0,
-          );
-        }
+      options: {
+        maxTurns: 100,
+        permissionMode: 'bypassPermissions',
+        allowDangerouslySkipPermissions: true,
+        cwd: input.outputDir,
+        model: process.env['CLAUDE_MODEL'] ?? 'claude-sonnet-4-5-20250929',
       },
     });
+
+    for await (const message of stream) {
+      if (message.type === 'assistant') {
+        turns++;
+        const apiMsg = message.message;
+
+        for (const block of apiMsg.content) {
+          if (block.type === 'tool_use') {
+            const callTimer = new Timer();
+            const record: ToolCallRecord = {
+              tool: block.name,
+              input: block.input as Record<string, unknown>,
+              timestamp: new Date().toISOString(),
+              duration: 0,
+            };
+
+            await logger.logToolCall(block.name, block.input as Record<string, unknown>);
+            record.duration = callTimer.elapsed();
+            toolCalls.push(record);
+          }
+
+          if (block.type === 'text') {
+            await logger.logResponse(block.text);
+          }
+        }
+      }
+
+      if (message.type === 'result') {
+        totalCost = message.total_cost_usd;
+        turns = message.num_turns;
+        totalInputTokens = message.usage.input_tokens;
+        totalOutputTokens = message.usage.output_tokens;
+      }
+    }
 
     const duration = timer.elapsed();
 

@@ -15,11 +15,15 @@ export type AgentName =
   | 'network-vuln'
   | 'misconfig-vuln'
   | 'credential-vuln'
+  | 'rdp-vuln'
+  | 'vnc-vuln'
   | 'ssh-exploit'
   | 'privesc-exploit'
   | 'network-exploit'
   | 'misconfig-exploit'
   | 'credential-exploit'
+  | 'rdp-exploit'
+  | 'vnc-exploit'
   | 'report';
 
 /**
@@ -33,11 +37,15 @@ export type PromptName =
   | 'vuln-network'
   | 'vuln-misconfig'
   | 'vuln-credential'
+  | 'vuln-rdp'
+  | 'vuln-vnc'
   | 'exploit-ssh'
   | 'exploit-privesc'
   | 'exploit-network'
   | 'exploit-misconfig'
   | 'exploit-credential'
+  | 'exploit-rdp'
+  | 'exploit-vnc'
   | 'report-executive';
 
 /**
@@ -48,7 +56,9 @@ export type TerminalAgent =
   | 'terminal-agent2'
   | 'terminal-agent3'
   | 'terminal-agent4'
-  | 'terminal-agent5';
+  | 'terminal-agent5'
+  | 'terminal-agent6'
+  | 'terminal-agent7';
 
 /**
  * Maps agent names to their corresponding prompt template names.
@@ -62,11 +72,15 @@ export function getPromptNameForAgent(agent: AgentName): PromptName {
     'network-vuln': 'vuln-network',
     'misconfig-vuln': 'vuln-misconfig',
     'credential-vuln': 'vuln-credential',
+    'rdp-vuln': 'vuln-rdp',
+    'vnc-vuln': 'vuln-vnc',
     'ssh-exploit': 'exploit-ssh',
     'privesc-exploit': 'exploit-privesc',
     'network-exploit': 'exploit-network',
     'misconfig-exploit': 'exploit-misconfig',
     'credential-exploit': 'exploit-credential',
+    'rdp-exploit': 'exploit-rdp',
+    'vnc-exploit': 'exploit-vnc',
     'report': 'report-executive',
   };
   return mapping[agent];
@@ -87,6 +101,10 @@ export function getTerminalForAgent(agent: AgentName): TerminalAgent | null {
     'misconfig-exploit': 'terminal-agent4',
     'credential-vuln': 'terminal-agent5',
     'credential-exploit': 'terminal-agent5',
+    'rdp-vuln': 'terminal-agent6',
+    'rdp-exploit': 'terminal-agent6',
+    'vnc-vuln': 'terminal-agent7',
+    'vnc-exploit': 'terminal-agent7',
   };
   return mapping[agent] ?? null;
 }

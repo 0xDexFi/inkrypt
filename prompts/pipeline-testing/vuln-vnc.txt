@@ -1,0 +1,20 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+SCOPE: {{SCOPE}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+Quickly analyze VNC vulnerabilities on {{TARGET}} using recon data in {{OUTPUT_DIR}}/. Check for unauthenticated access, weak passwords, version-specific CVEs, unencrypted sessions, and authentication bypass methods. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write to {{OUTPUT_DIR}}/vuln-queues/:
+
+**vuln-queue-vnc.md** - Each finding with: Severity, Category, Description, Evidence, Impact, and Recommended Fix.
+
+## Safety Rules
+
+- No brute force, no exploitation, no config modification
+- Stay within scope: {{SCOPE}}

@@ -23,11 +23,15 @@ export const AGENT_VALIDATORS: Record<AgentName, string[]> = {
   'network-vuln': ['vuln-queue-network.md'],
   'misconfig-vuln': ['vuln-queue-misconfig.md'],
   'credential-vuln': ['vuln-queue-credential.md'],
+  'rdp-vuln': ['vuln-queue-rdp.md'],
+  'vnc-vuln': ['vuln-queue-vnc.md'],
   'ssh-exploit': ['exploit-results-ssh.md'],
   'privesc-exploit': ['exploit-results-privesc.md'],
   'network-exploit': ['exploit-results-network.md'],
   'misconfig-exploit': ['exploit-results-misconfig.md'],
   'credential-exploit': ['exploit-results-credential.md'],
+  'rdp-exploit': ['exploit-results-rdp.md'],
+  'vnc-exploit': ['exploit-results-vnc.md'],
   'report': ['pentest-report.md'],
 };
 
@@ -41,6 +45,8 @@ export const TERMINAL_AGENT_MAPPING: Record<string, TerminalAgent> = {
   'network': 'terminal-agent3',
   'misconfig': 'terminal-agent4',
   'credential': 'terminal-agent5',
+  'rdp': 'terminal-agent6',
+  'vnc': 'terminal-agent7',
 };
 
 /**
@@ -52,6 +58,8 @@ export const VULN_DOMAINS = [
   'network',
   'misconfig',
   'credential',
+  'rdp',
+  'vnc',
 ] as const;
 
 export type VulnDomain = (typeof VULN_DOMAINS)[number];

@@ -18,6 +18,8 @@ export const AGENT_COLORS: Record<string, (text: string) => string> = {
   'network': chalk.yellow,
   'misconfig': chalk.green,
   'credential': chalk.hex('#FF8C00'),
+  'rdp': chalk.hex('#00BFFF'),
+  'vnc': chalk.hex('#9370DB'),
   'report': chalk.white,
 };
 

@@ -170,6 +170,22 @@ export async function credentialExploitActivity(input: AgentActivityInput): Prom
   return executeAgentActivity({ ...input, agent: 'credential-exploit' });
 }
 
+export async function rdpVulnActivity(input: AgentActivityInput): Promise<AgentActivityResult> {
+  return executeAgentActivity({ ...input, agent: 'rdp-vuln' });
+}
+
+export async function rdpExploitActivity(input: AgentActivityInput): Promise<AgentActivityResult> {
+  return executeAgentActivity({ ...input, agent: 'rdp-exploit' });
+}
+
+export async function vncVulnActivity(input: AgentActivityInput): Promise<AgentActivityResult> {
+  return executeAgentActivity({ ...input, agent: 'vnc-vuln' });
+}
+
+export async function vncExploitActivity(input: AgentActivityInput): Promise<AgentActivityResult> {
+  return executeAgentActivity({ ...input, agent: 'vnc-exploit' });
+}
+
 export async function reportActivity(input: AgentActivityInput): Promise<AgentActivityResult> {
   return executeAgentActivity({ ...input, agent: 'report' });
 }
@@ -251,6 +267,10 @@ export const allActivities = {
   networkExploitActivity,
   misconfigExploitActivity,
   credentialExploitActivity,
+  rdpVulnActivity,
+  rdpExploitActivity,
+  vncVulnActivity,
+  vncExploitActivity,
   reportActivity,
   preReconToolScanActivity,
   assembleReportActivity,

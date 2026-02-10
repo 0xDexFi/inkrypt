@@ -87,7 +87,6 @@ export async function pentestPipelineWorkflow(input: PipelineInput): Promise<Pip
 
   // Build common activity input
   const baseInput: Omit<AgentActivityInput, 'agent'> = {
-    agent: 'pre-recon' as AgentName, // placeholder, overridden per activity
     target: input.target,
     sessionId,
     sshUser: input.sshUser,
@@ -150,6 +149,8 @@ export async function pentestPipelineWorkflow(input: PipelineInput): Promise<Pip
       runVulnExploitPipeline('network', state, baseInput),
       runVulnExploitPipeline('misconfig', state, baseInput),
       runVulnExploitPipeline('credential', state, baseInput),
+      runVulnExploitPipeline('rdp', state, baseInput),
+      runVulnExploitPipeline('vnc', state, baseInput),
     ];
 
     const pipelinedResults = await Promise.allSettled(pipelinedPromises);
@@ -261,6 +262,10 @@ function getActivityFunction(agent: AgentName) {
     'network-exploit': activities.networkExploitActivity,
     'misconfig-exploit': activities.misconfigExploitActivity,
     'credential-exploit': activities.credentialExploitActivity,
+    'rdp-vuln': activities.rdpVulnActivity,
+    'rdp-exploit': activities.rdpExploitActivity,
+    'vnc-vuln': activities.vncVulnActivity,
+    'vnc-exploit': activities.vncExploitActivity,
     'report': activities.reportActivity,
   };
   return mapping[agent]!;

@@ -55,8 +55,6 @@ Analyze all discovered network services for vulnerabilities:
 
 ### 7. Other Services
 - SNMP (community string guessing, information disclosure)
-- RDP (BlueKeep, NLA requirements)
-- VNC (authentication bypass, weak passwords)
 - Telnet (cleartext, no authentication)
 - NFS (exports, root squashing)
 - LDAP (anonymous bind, information disclosure)

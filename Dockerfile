@@ -115,6 +115,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
+# RDP & VNC Testing Tools
+# =============================================================================
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    freerdp2-x11 \
+    rdesktop \
+    tigervnc-viewer \
+    && rm -rf /var/lib/apt/lists/*
+
+# =============================================================================
 # Privilege Escalation & Post-Exploitation Tools
 # =============================================================================
 RUN apt-get update && apt-get install -y --no-install-recommends \
