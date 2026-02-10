@@ -45,12 +45,23 @@ npm install
 npm run build
 ```
 
+### Setup
+
+```bash
+# 1. Edit .env and add your Anthropic API key
+#    (auto-created from .env.example on first run)
+nano .env
+```
+
+Your `.env` file:
+```env
+ANTHROPIC_API_KEY=sk-ant-your-actual-key-here
+CLAUDE_CODE_MAX_OUTPUT_TOKENS=64000
+```
+
 ### Usage
 
 ```bash
-# Set API key
-export ANTHROPIC_API_KEY=sk-ant-...
-
 # Basic system scan
 ./inkrypt start TARGET=192.168.1.100
 
@@ -73,11 +84,9 @@ export ANTHROPIC_API_KEY=sk-ant-...
 ### Docker (Recommended)
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
+# Just edit .env and run - Docker includes all 40+ tools
 ./inkrypt start TARGET=192.168.1.100
 ```
-
-Docker includes all security tools pre-installed: nmap, hydra, ssh-audit, nuclei, subfinder, john, nikto, impacket.
 
 ## Architecture
 
