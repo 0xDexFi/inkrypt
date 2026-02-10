@@ -109,6 +109,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     smbclient \
     smbmap \
     crackmapexec \
+    netexec \
     nbtscan \
     onesixtyone \
     snmp \
@@ -161,12 +162,10 @@ RUN python3 -m venv /opt/venv && \
     ssh-audit \
     paramiko \
     impacket \
-    netexec \
     bloodhound \
     certipy-ad \
     pwntools \
-    droopescan \
-    wpscan
+    droopescan
 
 ENV PATH="/opt/venv/bin:/opt/privesc:$PATH"
 
