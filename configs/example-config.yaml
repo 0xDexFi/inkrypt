@@ -1,0 +1,78 @@
+# =============================================================================
+# Inkrypt - Example Configuration
+# System & SSH Penetration Testing
+# =============================================================================
+
+# Target system (required)
+target: "192.168.1.100"
+
+# SSH authentication (optional - enables authenticated testing)
+ssh:
+  type: key                      # password | key | agent | none
+  username: admin
+  privateKeyPath: ~/.ssh/id_rsa
+  # password: "changeme"         # Use for password auth
+  # passphrase: "keypass"        # For encrypted private keys
+  port: 22
+
+# Additional service credentials for testing (optional)
+credentials:
+  - service: mysql
+    port: 3306
+    username: root
+    password: ""
+    description: "MySQL default root without password"
+
+  - service: ftp
+    port: 21
+    username: anonymous
+    password: "anonymous@"
+    description: "Anonymous FTP access"
+
+  - service: http
+    port: 8080
+    username: admin
+    password: admin
+    description: "Web management interface"
+
+# Network scope (optional)
+network:
+  cidr: "192.168.1.0/24"         # Scan entire subnet
+  excludeHosts:
+    - "192.168.1.1"              # Gateway - do not scan
+    - "192.168.1.254"            # DNS server - do not scan
+  excludePorts:
+    - 53                          # DNS
+  maxScanRate: 1000               # Max packets/sec
+
+# Scope rules (optional)
+rules:
+  focus:
+    - pattern: "ssh"
+      description: "Focus on SSH security analysis"
+    - pattern: "port:22"
+      description: "SSH service on default port"
+    - pattern: "port:2222"
+      description: "SSH on alternate port"
+
+  avoid:
+    - pattern: "production-db"
+      description: "Do not test production database"
+    - pattern: "port:443"
+      description: "Skip HTTPS testing (out of scope)"
+
+# Scan options (optional)
+scanOptions:
+  aggressive: false               # Set true for aggressive scanning
+  udpScan: false                  # Set true to include UDP scanning
+  osDetection: true               # OS fingerprinting
+  serviceVersioning: true         # Service version detection
+  scriptScan: true                # NSE script scanning
+  timing: "T3"                    # T0(paranoid) - T5(insane)
+
+# Custom commands (optional)
+customCommands:
+  preRecon:
+    - "ping -c 3 192.168.1.100"  # Verify target is alive
+  postRecon:
+    - "echo 'Recon complete'"

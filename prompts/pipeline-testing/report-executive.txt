@@ -1,0 +1,18 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+Review all outputs in {{OUTPUT_DIR}}/ (tool-outputs/, vuln-queues/, exploit-results/, agent-logs/) and generate a concise executive penetration test report. Include overall security posture, top findings table, brief attack narrative, and prioritized remediation roadmap. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write to {{OUTPUT_DIR}}/reports/:
+
+1. **executive-summary.md** - 1-page executive summary for leadership
+2. **pentest-report.md** - Full technical report with all findings, evidence, CVSS scores, CWE references, and actionable remediation steps
+
+## Quality Standards
+
+- Only report confirmed findings with evidence - no false positives
+- Professional tone suitable for both executives and technical teams

@@ -1,0 +1,12 @@
+## SSH Connection Instructions
+
+{{SSH_INSTRUCTIONS}}
+
+### Connection Guidelines
+
+- Always use the most secure connection method available
+- Prefer key-based authentication over password authentication
+- Use `-o StrictHostKeyChecking=no` only for initial connection to test targets
+- Log all authentication attempts for audit trail
+- If credentials fail, do NOT retry more than 3 times
+- Report any credential issues immediately in your findings

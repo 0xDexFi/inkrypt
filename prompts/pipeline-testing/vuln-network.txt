@@ -1,0 +1,20 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+SCOPE: {{SCOPE}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+Quickly analyze all discovered network services on {{TARGET}} for vulnerabilities using recon data in {{OUTPUT_DIR}}/. Check web, FTP, SMB, database, mail, DNS, and other services. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write to {{OUTPUT_DIR}}/vuln-queues/:
+
+**vuln-queue-network.md** - Each finding with: Severity, Category, Affected service/port, Description, Evidence, Impact, and Recommended Fix.
+
+## Safety Rules
+
+- No exploitation, no DoS, no excessive requests
+- Stay within scope: {{SCOPE}}

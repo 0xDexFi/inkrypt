@@ -1,0 +1,54 @@
+# =============================================================================
+# Inkrypt - Docker Compose orchestration
+# Services: Temporal server + Inkrypt worker
+# =============================================================================
+
+version: "3.8"
+
+services:
+  temporal:
+    image: temporalio/auto-setup:latest
+    ports:
+      - "7233:7233"   # gRPC
+      - "8233:8233"   # HTTP (Web UI)
+    environment:
+      - DB=sqlite
+      - DYNAMIC_CONFIG_FILE_PATH=/etc/temporal/dynamic-config.yaml
+    volumes:
+      - temporal-data:/var/lib/temporal
+    healthcheck:
+      test: ["CMD", "temporal", "workflow", "list", "--namespace", "default"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      temporal:
+        condition: service_healthy
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CLAUDE_CODE_MAX_OUTPUT_TOKENS=64000
+      - NODE_OPTIONS=--max-old-space-size=4096
+    volumes:
+      - ./audit-logs:/app/audit-logs
+      - ./targets:/app/targets
+      - ./prompts:/app/prompts
+      - ./configs:/app/configs
+    cap_add:
+      - NET_RAW        # Required for nmap raw packet scanning
+      - NET_ADMIN       # Required for network interface operations
+    networks:
+      - inkrypt-net
+
+networks:
+  inkrypt-net:
+    driver: bridge
+
+volumes:
+  temporal-data:

@@ -1,0 +1,20 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+Quickly identify privilege escalation vectors on {{TARGET}} using recon data in {{OUTPUT_DIR}}/. Check SUID/SGID binaries, sudo rules, cron jobs, kernel version, file permissions, and service-level escalation paths. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write to {{OUTPUT_DIR}}/vuln-queues/:
+
+**vuln-queue-privesc.md** - Each finding with: Severity, Category (SUID/Sudo/Cron/Kernel/Permissions/Service/Environment), Description, Evidence, Exploitation path, and Recommended Fix.
+
+## Safety Rules
+
+- Do NOT escalate privileges - analysis and enumeration only
+- Do NOT modify system files or run kernel exploits
+- Stay within scope: {{SCOPE}}

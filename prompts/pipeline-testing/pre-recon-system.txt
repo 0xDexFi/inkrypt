@@ -1,0 +1,26 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+SCOPE: {{SCOPE}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+## Configuration Context
+
+{{CONFIG_CONTEXT}}
+
+Quickly review any scan data in tool-outputs/ and map the attack surface for {{TARGET}}. Identify open ports, running services with versions, and obvious weaknesses. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write the following files to {{OUTPUT_DIR}}/:
+
+1. **service-enumeration.md** - Brief list of discovered services, ports, and versions
+2. **attack-surface.md** - Key entry points with risk levels (initial draft)
+3. **technology-stack.md** - OS, kernel, and primary services detected (initial draft)
+
+## Safety Rules
+
+- Only scan targets within scope: {{SCOPE}}
+- No exploitation, no DoS, no file modification on target

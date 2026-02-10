@@ -1,0 +1,8 @@
+node_modules/
+dist/
+audit-logs/
+targets/
+.env
+*.log
+*.tmp
+.DS_Store

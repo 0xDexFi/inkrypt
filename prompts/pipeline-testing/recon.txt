@@ -1,0 +1,22 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+SCOPE: {{SCOPE}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+Review pre-recon data in {{OUTPUT_DIR}}/ and perform a quick deep reconnaissance pass on {{TARGET}}. Enumerate services in detail, analyze SSH configuration, and prioritize entry points. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Update/create the following files in {{OUTPUT_DIR}}/:
+
+1. **attack-surface.md** - Complete attack surface map with prioritized entry points
+2. **technology-stack.md** - Detailed technology stack and version information
+3. **entry-points.md** - Prioritized list of entry points with risk assessment
+
+## Safety Rules
+
+- Stay within scope: {{SCOPE}}
+- Reconnaissance only - no exploitation, no file modification, no service disruption

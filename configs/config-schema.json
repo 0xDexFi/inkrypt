@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Inkrypt Configuration",
+  "description": "Configuration schema for Inkrypt system penetration testing",
+  "type": "object",
+  "required": ["target"],
+  "properties": {
+    "target": {
+      "type": "string",
+      "description": "Target system IP address or hostname"
+    },
+    "ssh": {
+      "type": "object",
+      "description": "SSH authentication configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["password", "key", "agent", "none"],
+          "description": "Authentication method"
+        },
+        "username": {
+          "type": "string",
+          "description": "SSH username"
+        },
+        "password": {
+          "type": "string",
+          "description": "SSH password (for password auth)"
+        },
+        "privateKeyPath": {
+          "type": "string",
+          "description": "Path to SSH private key"
+        },
+        "passphrase": {
+          "type": "string",
+          "description": "Passphrase for encrypted private key"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 22,
+          "description": "SSH port number"
+        }
+      }
+    },
+    "credentials": {
+      "type": "array",
+      "description": "Service-specific credentials for testing",
+      "items": {
+        "type": "object",
+        "required": ["service", "port"],
+        "properties": {
+          "service": {
+            "type": "string",
+            "description": "Service name (e.g., mysql, ftp, http)"
+          },
+          "port": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "description": "Network scope configuration",
+      "properties": {
+        "cidr": {
+          "type": "string",
+          "description": "CIDR range for network scanning (e.g., 192.168.1.0/24)"
+        },
+        "excludeHosts": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Hosts to exclude from scanning"
+        },
+        "excludePorts": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "description": "Ports to exclude from scanning"
+        },
+        "maxScanRate": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "description": "Maximum packets per second for scanning"
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "description": "Scope rules for testing",
+      "properties": {
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["pattern"],
+            "properties": {
+              "pattern": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          },
+          "description": "Patterns to focus testing on"
+        },
+        "avoid": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["pattern"],
+            "properties": {
+              "pattern": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          },
+          "description": "Patterns to avoid during testing"
+        }
+      }
+    },
+    "scanOptions": {
+      "type": "object",
+      "description": "Scan configuration options",
+      "properties": {
+        "aggressive": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable aggressive scanning"
+        },
+        "udpScan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include UDP port scanning"
+        },
+        "osDetection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable OS detection"
+        },
+        "serviceVersioning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable service version detection"
+        },
+        "scriptScan": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable nmap script scanning"
+        },
+        "timing": {
+          "type": "string",
+          "enum": ["T0", "T1", "T2", "T3", "T4", "T5"],
+          "default": "T3",
+          "description": "Nmap timing template (T0=paranoid, T5=insane)"
+        }
+      }
+    },
+    "customCommands": {
+      "type": "object",
+      "description": "Custom commands to run during testing",
+      "properties": {
+        "preRecon": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Commands to run before reconnaissance"
+        },
+        "postRecon": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Commands to run after reconnaissance"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,20 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+SSH PORT: {{SSH_PORT}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+Quickly analyze SSH vulnerabilities on {{TARGET}}:{{SSH_PORT}} using recon data in {{OUTPUT_DIR}}/. Check server configuration, authentication weaknesses, known CVEs, and brute-force resistance. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write to {{OUTPUT_DIR}}/vuln-queues/:
+
+**vuln-queue-ssh.md** - Each finding with: Severity, Category, Description, Evidence, Impact, and Recommended Fix.
+
+## Safety Rules
+
+- No brute force, no exploitation, no config modification
+- Stay within scope: {{SCOPE}}

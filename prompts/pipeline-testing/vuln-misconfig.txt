@@ -1,0 +1,19 @@
+PIPELINE TESTING MODE - Fast iteration, minimal output.
+
+TARGET: {{TARGET}}
+OUTPUT DIRECTORY: {{OUTPUT_DIR}}
+
+{{SSH_INSTRUCTIONS}}
+
+Quickly identify system misconfigurations on {{TARGET}} using recon data in {{OUTPUT_DIR}}/. Check file permissions, user/access controls, service configs, network settings, kernel hardening, and container security. Focus on speed over thoroughness; write minimal but valid deliverables.
+
+## Deliverables
+
+Write to {{OUTPUT_DIR}}/vuln-queues/:
+
+**vuln-queue-misconfig.md** - Each finding with: Severity, Category (FileSystem/Access/Service/Network/Kernel/Container/Logging), Description, Evidence, Risk assessment, and Remediation steps.
+
+## Safety Rules
+
+- Read-only analysis - do NOT modify system configuration or disable security controls
+- Stay within scope: {{SCOPE}}
