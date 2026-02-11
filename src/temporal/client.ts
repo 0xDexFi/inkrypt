@@ -18,18 +18,13 @@ function parseArgs(argv: string[]): PipelineInput {
   const args = argv.slice(2);
 
   if (args.length === 0) {
-    console.error('Usage: inkrypt <target> [options]');
+    console.error('No target specified.');
     console.error('');
-    console.error('Options:');
-    console.error('  --ssh-user <user>       SSH username');
-    console.error('  --ssh-key <path>        SSH private key path');
-    console.error('  --ssh-pass <password>   SSH password');
-    console.error('  --ssh-port <port>       SSH port (default: 22)');
-    console.error('  --scope <cidr>          Network scope CIDR');
-    console.error('  --config <path>         YAML config file');
-    console.error('  --output <path>         Output directory');
-    console.error('  --workflow-id <id>      Custom workflow ID');
-    console.error('  --pipeline-testing      Fast iteration mode');
+    console.error('Use the CLI wrapper for interactive mode:');
+    console.error('  ./inkrypt');
+    console.error('');
+    console.error('Or pass arguments directly:');
+    console.error('  ./inkrypt start TARGET=<ip> [SSH_USER=<user>] [SSH_KEY=<path>]');
     process.exit(1);
   }
 
@@ -90,7 +85,7 @@ async function main(): Promise<void> {
   const input = parseArgs(process.argv);
   const temporalAddress = process.env['TEMPORAL_ADDRESS'] ?? 'localhost:7233';
 
-  showSplashScreen();
+  await showSplashScreen();
 
   console.log(`\n[Inkrypt] Target: ${input.target}`);
   if (input.sshUser) console.log(`[Inkrypt] SSH User: ${input.sshUser}`);

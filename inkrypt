@@ -53,21 +53,47 @@ load_env
 # =============================================================================
 
 show_banner() {
-    echo -e "${CYAN}"
-    cat << 'BANNER'
+    # Color codes for gradient effect
+    local C1='\033[38;5;197m'  # Hot pink/red
+    local C2='\033[38;5;198m'  # Magenta-pink
+    local C3='\033[38;5;163m'  # Magenta
+    local C4='\033[38;5;128m'  # Purple
+    local C5='\033[38;5;99m'   # Blue-purple
+    local C6='\033[38;5;69m'   # Blue
+    local C7='\033[38;5;39m'   # Cyan-blue
+    local C8='\033[38;5;51m'   # Cyan
+    local DIM='\033[2m'
+    local RESET='\033[0m'
 
-    ██╗███╗   ██╗██╗  ██╗██████╗ ██╗   ██╗██████╗ ████████╗
-    ██║████╗  ██║██║ ██╔╝██╔══██╗╚██╗ ██╔╝██╔══██╗╚══██╔══╝
-    ██║██╔██╗ ██║█████╔╝ ██████╔╝ ╚████╔╝ ██████╔╝   ██║
-    ██║██║╚██╗██║██╔═██╗ ██╔══██╗  ╚██╔╝  ██╔═══╝    ██║
-    ██║██║ ╚████║██║  ██╗██║  ██║   ██║   ██║        ██║
-    ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝        ╚═╝
+    echo ""
+    echo -e "${DIM}${GREEN}  [sys] Establishing encrypted channel...${RESET}"
+    echo -e "${DIM}${GREEN}  [sys] Loading exploit modules...${RESET}"
+    echo -e "${DIM}${GREEN}  [sys] Initializing agent framework...${RESET}"
+    echo ""
 
-    Autonomous System & SSH Penetration Testing Framework
-    =====================================================
-
-BANNER
-    echo -e "${NC}"
+    # Main ASCII art with gradient per line
+    echo -e "  ${C1}     ██▓ ███▄    █  ██ ▄█▀ ██▀███   ▓██   ██▓ ██▓███  ▄▄▄█████▓${RESET}"
+    echo -e "  ${C2}    ▓██▒ ██ ▀█   █  ██▄█▒ ▓██ ▒ ██▒ ▒██  ██▒ ▓██▒  ██▒▓  ██▒ ▓▒${RESET}"
+    echo -e "  ${C3}    ▒██▒▓██  ▀█ ██▒▓███▄░ ▓██ ░▄█ ▒  ▒██ ██░ ▓██ ░▄█ ▒▒ ▓██░ ▒░${RESET}"
+    echo -e "  ${C4}    ░██░▓██▒  ▐▌██▒▓██ █▄ ▒██▀▀█▄    ░ ▐██▓░ ▒██▀▀█▄  ░ ▓██▓ ░${RESET}"
+    echo -e "  ${C5}    ░██░▒██░   ▓██░▒██▒ █▄░██▓ ▒██▒  ░ ██▒▓░ ░██▓ ▒██▒  ▒██▒ ░${RESET}"
+    echo -e "  ${C6}    ░▓  ░ ▒░   ▒ ▒ ▒ ▒▒ ▓▒░ ▒▓ ░▒▓░   ██▒▒▒  ░ ▒▓ ░▒▓░  ▒ ░░${RESET}"
+    echo -e "  ${C7}     ▒ ░ ░░   ░ ▒░░ ░▒ ▒░  ░▒ ░ ▒░  ▓██ ░▒░    ░▒ ░ ▒░    ░${RESET}"
+    echo -e "  ${C8}     ▒ ░  ░   ░ ░ ░ ░░ ░   ░░   ░   ▒ ▒ ░░     ░░   ░   ░${RESET}"
+    echo -e "  ${C8}${DIM}     ░          ░ ░  ░       ░        ░ ░          ░${RESET}"
+    echo -e "  ${C8}${DIM}                            ░${RESET}"
+    echo ""
+    echo -e "  ${DIM}${C4}  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+    echo ""
+    echo -e "  ${C1}☠${RESET} ${BOLD}AUTONOMOUS SYSTEM & SSH PENETRATION TESTING FRAMEWORK${RESET}"
+    echo ""
+    echo -e "  ${C3}┌─${BOLD} SYSTEM ${RESET}${C3}─────────────────────────────────────────────────────────┐${RESET}"
+    echo -e "  ${C3}│${RESET}  Engine    ${DIM}│${RESET} Claude Agent SDK + Temporal Orchestration            ${C3}│${RESET}"
+    echo -e "  ${C3}│${RESET}  Agents    ${DIM}│${RESET} 17 Specialized AI Agents, 7 Pipelined Domains       ${C3}│${RESET}"
+    echo -e "  ${C3}│${RESET}  Toolkit   ${DIM}│${RESET} Metasploit, Nmap, Hydra, Nuclei, Impacket, 30+      ${C3}│${RESET}"
+    echo -e "  ${C3}│${RESET}  Status    ${DIM}│${RESET} ${C1}■${C2} ■${C3} ■${RESET}  ARMED & READY                               ${C3}│${RESET}"
+    echo -e "  ${C3}└──────────────────────────────────────────────────────────────────────┘${RESET}"
+    echo ""
 }
 
 show_help() {
@@ -143,7 +169,7 @@ validate_credentials() {
 }
 
 parse_args() {
-    local command="${1:-help}"
+    local command="${1:-interactive}"
     shift || true
 
     for arg in "$@"; do
@@ -178,7 +204,7 @@ ensure_containers() {
 
     echo -e "${BLUE}[*] Waiting for Temporal to be healthy...${NC}"
     local retries=0
-    while ! docker compose exec -T temporal temporal workflow list --namespace default &>/dev/null; do
+    while ! docker compose exec -T temporal temporal operator cluster health --address localhost:7233 &>/dev/null; do
         retries=$((retries + 1))
         if [[ $retries -ge 30 ]]; then
             echo -e "${RED}ERROR: Temporal server failed to start${NC}"
@@ -258,6 +284,194 @@ cmd_stop() {
 }
 
 # =============================================================================
+# Interactive Mode
+# =============================================================================
+
+# Validation helpers
+validate_ip_or_hostname() {
+    local input="$1"
+    # IPv4
+    if [[ "$input" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+        local IFS='.'
+        read -ra octets <<< "$input"
+        for octet in "${octets[@]}"; do
+            if (( octet > 255 )); then return 1; fi
+        done
+        return 0
+    fi
+    # Hostname (basic: alphanumeric, hyphens, dots)
+    if [[ "$input" =~ ^[a-zA-Z0-9]([a-zA-Z0-9\.\-]*[a-zA-Z0-9])?$ ]]; then
+        return 0
+    fi
+    return 1
+}
+
+validate_port() {
+    local port="$1"
+    if [[ "$port" =~ ^[0-9]+$ ]] && (( port >= 1 && port <= 65535 )); then
+        return 0
+    fi
+    return 1
+}
+
+validate_cidr() {
+    local cidr="$1"
+    if [[ "$cidr" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}$ ]]; then
+        local ip="${cidr%/*}"
+        local prefix="${cidr#*/}"
+        if (( prefix <= 32 )); then
+            validate_ip_or_hostname "$ip" && return 0
+        fi
+    fi
+    return 1
+}
+
+cmd_interactive() {
+    # Color codes matching the cyberpunk banner
+    local C1='\033[38;5;197m'  # Hot pink/red
+    local C3='\033[38;5;163m'  # Magenta
+    local C4='\033[38;5;128m'  # Purple
+    local C8='\033[38;5;51m'   # Cyan
+    local DIM='\033[2m'
+    local RESET='\033[0m'
+
+    # Trap Ctrl+C for clean exit during prompts
+    trap 'echo -e "\n\n  ${DIM}${C4}[sys] Aborted.${RESET}\n"; exit 130' INT
+
+    show_banner
+
+    echo -e "  ${C3}┌─${BOLD} TARGET CONFIGURATION ${RESET}${C3}──────────────────────────────────────────────┐${RESET}"
+    echo -e "  ${C3}│${RESET}                                                                      ${C3}│${RESET}"
+
+    # --- Target IP (required) ---
+    local target=""
+    while true; do
+        echo -ne "  ${C3}│${RESET}  ${C8}Target IP or hostname:${RESET} "
+        read -r target
+        if [[ -z "$target" ]]; then
+            echo -e "  ${C3}│${RESET}  ${RED}  Target is required${NC}"
+            continue
+        fi
+        if ! validate_ip_or_hostname "$target"; then
+            echo -e "  ${C3}│${RESET}  ${RED}  Invalid IP or hostname format${NC}"
+            target=""
+            continue
+        fi
+        break
+    done
+
+    # --- SSH Username (optional) ---
+    echo -ne "  ${C3}│${RESET}  ${C8}SSH username ${DIM}(Enter to skip)${RESET}: "
+    local ssh_user=""
+    read -r ssh_user
+
+    # --- SSH Auth (only if user provided) ---
+    local ssh_key=""
+    local ssh_pass=""
+    if [[ -n "$ssh_user" ]]; then
+        echo -ne "  ${C3}│${RESET}  ${C8}SSH key path ${DIM}(Enter for password)${RESET}: "
+        read -r ssh_key
+        if [[ -z "$ssh_key" ]]; then
+            echo -ne "  ${C3}│${RESET}  ${C8}SSH password:${RESET} "
+            read -rs ssh_pass
+            echo ""
+        fi
+    fi
+
+    # --- SSH Port (optional, default 22) ---
+    local ssh_port=""
+    while true; do
+        echo -ne "  ${C3}│${RESET}  ${C8}SSH port ${DIM}[22]${RESET}: "
+        read -r ssh_port
+        if [[ -z "$ssh_port" ]]; then
+            ssh_port=""
+            break
+        fi
+        if ! validate_port "$ssh_port"; then
+            echo -e "  ${C3}│${RESET}  ${RED}  Port must be 1-65535${NC}"
+            ssh_port=""
+            continue
+        fi
+        break
+    done
+
+    # --- Network scope CIDR (optional) ---
+    local scope=""
+    while true; do
+        echo -ne "  ${C3}│${RESET}  ${C8}Network scope CIDR ${DIM}(Enter to skip)${RESET}: "
+        read -r scope
+        if [[ -z "$scope" ]]; then
+            break
+        fi
+        if ! validate_cidr "$scope"; then
+            echo -e "  ${C3}│${RESET}  ${RED}  Invalid CIDR format (e.g. 192.168.1.0/24)${NC}"
+            scope=""
+            continue
+        fi
+        break
+    done
+
+    # --- Pipeline testing mode (y/N) ---
+    echo -ne "  ${C3}│${RESET}  ${C8}Pipeline testing mode? ${DIM}[y/N]${RESET}: "
+    local pipeline_testing=""
+    read -r pipeline_testing
+    case "$pipeline_testing" in
+        [yY]|[yY][eE][sS]) pipeline_testing="true" ;;
+        *) pipeline_testing="" ;;
+    esac
+
+    echo -e "  ${C3}│${RESET}                                                                      ${C3}│${RESET}"
+    echo -e "  ${C3}└──────────────────────────────────────────────────────────────────────┘${RESET}"
+    echo ""
+
+    # --- Confirmation summary ---
+    local display_port="${ssh_port:-22}"
+    local ssh_summary="—"
+    if [[ -n "$ssh_user" ]]; then
+        local auth_type="password"
+        [[ -n "$ssh_key" ]] && auth_type="key: $ssh_key"
+        ssh_summary="${ssh_user}@${target}:${display_port} (${auth_type})"
+    fi
+    local scope_summary="${scope:-—}"
+    local mode_summary="Production"
+    [[ "$pipeline_testing" == "true" ]] && mode_summary="${YELLOW}Pipeline Testing${RESET}"
+
+    echo -e "  ${C4}┌─${BOLD} CONFIRM ${RESET}${C4}────────────────────────────────────────────────────────────┐${RESET}"
+    echo -e "  ${C4}│${RESET}  Target:    ${BOLD}${target}${RESET}"
+    echo -e "  ${C4}│${RESET}  SSH:       ${ssh_summary}"
+    echo -e "  ${C4}│${RESET}  Scope:     ${scope_summary}"
+    echo -e "  ${C4}│${RESET}  Mode:      ${mode_summary}"
+    echo -e "  ${C4}└──────────────────────────────────────────────────────────────────────┘${RESET}"
+    echo ""
+
+    echo -ne "  ${C1}Launch pentest? ${DIM}[Y/n]${RESET}: "
+    local confirm=""
+    read -r confirm
+    case "$confirm" in
+        [nN]|[nN][oO])
+            echo -e "\n  ${DIM}${C4}[sys] Aborted.${RESET}\n"
+            exit 0
+            ;;
+    esac
+
+    echo ""
+
+    # Remove the Ctrl+C trap now that we're starting
+    trap - INT
+
+    # Set the global vars and call cmd_start
+    INKRYPT_TARGET="$target"
+    INKRYPT_SSH_USER="$ssh_user"
+    INKRYPT_SSH_KEY="$ssh_key"
+    INKRYPT_SSH_PASS="$ssh_pass"
+    INKRYPT_SSH_PORT="$ssh_port"
+    INKRYPT_SCOPE="$scope"
+    INKRYPT_PIPELINE_TESTING="$pipeline_testing"
+
+    cmd_start
+}
+
+# =============================================================================
 # Main
 # =============================================================================
 
@@ -278,11 +492,12 @@ INKRYPT_CLEAN=""
 parse_args "$@"
 
 case "$COMMAND" in
-    start) cmd_start ;;
-    query) cmd_query ;;
-    logs)  cmd_logs ;;
-    stop)  cmd_stop ;;
-    help)  show_help ;;
+    start)       cmd_start ;;
+    interactive) cmd_interactive ;;
+    query)       cmd_query ;;
+    logs)        cmd_logs ;;
+    stop)        cmd_stop ;;
+    help)        show_help ;;
     *)
         echo -e "${RED}Unknown command: $COMMAND${NC}"
         show_help
