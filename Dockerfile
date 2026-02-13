@@ -3,7 +3,7 @@
 # Multi-stage Docker build with full pentest toolkit
 # =============================================================================
 
-# Stage 1: Builder
+# Stage 1: Builder - TypeScript compilation only
 FROM node:22-slim AS builder
 WORKDIR /app
 COPY package.json package-lock.json* ./
@@ -12,7 +12,7 @@ COPY tsconfig.json ./
 COPY src/ ./src/
 RUN npm run build
 
-# Stage 2: Runtime
+# Stage 2: Runtime - Kali Linux with full pentest toolkit
 FROM kalilinux/kali-rolling AS runtime
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -183,20 +183,38 @@ RUN mkdir -p /var/run/postgresql && \
 
 WORKDIR /app
 
-# Copy built application
+# Install production Node.js dependencies in runtime stage
+# This ensures native modules (@temporalio/core-bridge) compile for Kali
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Copy compiled TypeScript from builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY package.json ./
+
+# Copy application assets
 COPY prompts/ ./prompts/
 COPY configs/ ./configs/
 COPY inkrypt ./inkrypt
 RUN chmod +x ./inkrypt
 
-# Create workspace directories
-RUN mkdir -p /app/audit-logs /app/targets && \
+# Create workspace directories and temp dirs for pentest user
+RUN mkdir -p /app/audit-logs /app/targets /app/repos && \
+    mkdir -p /tmp/.cache /tmp/.config /tmp/.npm && \
+    chmod 777 /tmp/.cache /tmp/.config /tmp/.npm && \
     chown -R pentest:pentest /app
 
 USER pentest
+
+# Configure git to trust all directories (needed for git checkpointing)
+RUN git config --global --add safe.directory '*'
+
+# Environment variables
+ENV NODE_ENV=production
+ENV INKRYPT_DOCKER=true
+ENV HOME=/tmp
+ENV XDG_CACHE_HOME=/tmp/.cache
+ENV XDG_CONFIG_HOME=/tmp/.config
+ENV npm_config_cache=/tmp/.npm
 
 # Default: start as Temporal worker
 CMD ["node", "dist/temporal/worker.js"]

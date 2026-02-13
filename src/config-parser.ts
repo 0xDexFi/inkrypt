@@ -4,10 +4,15 @@
 // =============================================================================
 
 import { readFileSync, existsSync, statSync } from 'fs';
+import { createRequire } from 'module';
 import { load as loadYaml } from 'js-yaml';
-import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
+import { Ajv } from 'ajv';
+import type { FormatsPlugin } from 'ajv-formats';
 import type { DistributedConfig } from './types/config.js';
+
+// Handle ESM/CJS interop for ajv-formats
+const require = createRequire(import.meta.url);
+const addFormats: FormatsPlugin = require('ajv-formats');
 
 const MAX_CONFIG_SIZE = 1024 * 1024; // 1MB
 const DANGEROUS_PATTERNS = [
@@ -90,7 +95,7 @@ async function validateSchema(
     }
 
     const errors = validate.errors?.map(
-      (e) => `${e.instancePath} ${e.message}`,
+      (e: { instancePath: string; message?: string }) => `${e.instancePath} ${e.message}`,
     ) ?? ['Unknown validation error'];
 
     return { success: false, errors };

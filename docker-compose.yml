@@ -1,43 +1,22 @@
 # =============================================================================
 # Inkrypt - Docker Compose orchestration
-# Services: PostgreSQL + Temporal server + Inkrypt worker
+# Services: Temporal server (SQLite) + Inkrypt worker
 # =============================================================================
 
 services:
-  postgresql:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: temporal
-      POSTGRES_PASSWORD: temporal
-      POSTGRES_DB: temporal
-    volumes:
-      - postgresql-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U temporal"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-
   temporal:
-    image: temporalio/auto-setup:latest
+    image: temporalio/temporal:latest
+    command: ["server", "start-dev", "--db-filename", "/home/temporal/temporal.db", "--ip", "0.0.0.0"]
     ports:
       - "7233:7233"   # gRPC
       - "8233:8233"   # HTTP (Web UI)
-    environment:
-      - DB=postgres12_pgx
-      - DB_PORT=5432
-      - POSTGRES_USER=temporal
-      - POSTGRES_PWD=temporal
-      - POSTGRES_SEEDS=postgresql
-      - SKIP_DYNAMIC_CONFIG_UPDATE=true
-    depends_on:
-      postgresql:
-        condition: service_healthy
+    volumes:
+      - temporal-data:/home/temporal
     healthcheck:
-      test: ["CMD", "temporal", "workflow", "list", "--namespace", "default"]
+      test: ["CMD", "temporal", "operator", "cluster", "health", "--address", "localhost:7233"]
       interval: 10s
       timeout: 5s
-      retries: 12
+      retries: 10
       start_period: 30s
 
   worker:
@@ -47,19 +26,21 @@ services:
     depends_on:
       temporal:
         condition: service_healthy
-    env_file:
-      - .env
     environment:
       - TEMPORAL_ADDRESS=temporal:7233
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN:-}
+      - CLAUDE_CODE_MAX_OUTPUT_TOKENS=${CLAUDE_CODE_MAX_OUTPUT_TOKENS:-64000}
       - NODE_OPTIONS=--max-old-space-size=4096
     volumes:
       - ./audit-logs:/app/audit-logs
       - ./targets:/app/targets
       - ./prompts:/app/prompts
       - ./configs:/app/configs
+    shm_size: 2gb
     cap_add:
       - NET_RAW        # Required for nmap raw packet scanning
       - NET_ADMIN       # Required for network interface operations
 
 volumes:
-  postgresql-data:
+  temporal-data:

@@ -1,0 +1,60 @@
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+
+# Session and output data
+audit-logs/
+targets/
+sessions/
+repos/
+
+# IDE and editor
+.claude/
+.git/
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker files (no recursion)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation (keep CLAUDE.md for context)
+*.md
+!CLAUDE.md
+
+# Environment (secrets)
+.env
+.env.*
+!.env.example
+
+# Tests
+test/
+tests/
+coverage/
+
+# Temp files
+tmp/
+temp/
+.tmp/
+*.log
+logs/
+
+# Images/screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
